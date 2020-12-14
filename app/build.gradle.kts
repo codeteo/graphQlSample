@@ -60,4 +60,10 @@ dependencies {
     // Apollo
     implementation("com.apollographql.apollo:apollo-runtime:2.2.0")
     implementation("com.apollographql.apollo:apollo-rx2-support:2.2.0")
+
+    // RxJava
+    implementation("io.reactivex.rxjava2:rxjava:2.2.19")
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
 }
