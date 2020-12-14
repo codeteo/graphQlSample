@@ -1,15 +1,19 @@
 package com.example.rocketreserver
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.rx2.rxQuery
 import com.example.rocketreserver.data.apolloClient
 import com.example.rocketreserver.databinding.LaunchListFragmentBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class LaunchListFragment : Fragment() {
@@ -20,6 +24,7 @@ class LaunchListFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -27,7 +32,13 @@ class LaunchListFragment : Fragment() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                Log.i("LAUNCH-LIST", "onViewCreated: " + it.data?.launches)
+                val launches = it?.data?.launches?.launches?.filterNotNull()
+
+                if (launches != null && !it.hasErrors()) {
+                    val adapter = LaunchListAdapter(launches)
+                    binding.launches.layoutManager = LinearLayoutManager(requireContext())
+                    binding.launches.adapter = adapter
+                }
             }
 
     }
