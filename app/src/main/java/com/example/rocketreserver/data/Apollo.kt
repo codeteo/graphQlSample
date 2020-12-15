@@ -9,8 +9,13 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 private var instance: ApolloClient? = null
+
+private const val SERVER_URL = "https://apollo-fullstack-tutorial.herokuapp.com"
 
 fun apolloClient(context: Context): ApolloClient {
     check(Looper.myLooper() == Looper.getMainLooper()) {
@@ -22,7 +27,7 @@ fun apolloClient(context: Context): ApolloClient {
     }
 
     instance = ApolloClient.builder()
-            .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+            .serverUrl(SERVER_URL)
             .okHttpClient(httpclient(context))
             .build()
 
@@ -47,4 +52,13 @@ private class AuthorizationInterceptor(val context: Context) : Interceptor {
 
         return chain.proceed(request)
     }
+}
+
+fun retrofitClient(okHttpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .baseUrl(SERVER_URL)
+        .client(okHttpClient)
+        .build()
 }
