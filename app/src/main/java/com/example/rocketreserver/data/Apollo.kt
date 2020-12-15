@@ -23,6 +23,8 @@ import retrofit2.http.Query
 
 private var instance: ApolloClient? = null
 
+private var okHttpClient: OkHttpClient? = null
+
 private const val SERVER_URL = "https://apollo-fullstack-tutorial.herokuapp.com"
 
 fun apolloClient(context: Context): ApolloClient {
@@ -36,20 +38,26 @@ fun apolloClient(context: Context): ApolloClient {
 
     instance = ApolloClient.builder()
             .serverUrl(SERVER_URL)
-            .okHttpClient(httpclient(context))
+            .okHttpClient(okHttpClient!!)
             .build()
 
     return instance!!
 }
 
-private fun httpclient(context: Context): OkHttpClient {
+fun initHttpClient(context: Context): OkHttpClient {
+    if (instance != null) {
+        return okHttpClient!!
+    }
+
     val httpLoggingInterceptor = HttpLoggingInterceptor()
     httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-    return OkHttpClient().newBuilder()
+    okHttpClient =  OkHttpClient().newBuilder()
         .addInterceptor(AuthorizationInterceptor(context))
         .addInterceptor(httpLoggingInterceptor)
         .build()
+
+    return okHttpClient!!
 }
 
 private class AuthorizationInterceptor(val context: Context) : Interceptor {
@@ -67,7 +75,7 @@ fun retrofitClient(context: Context): Retrofit {
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .baseUrl(SERVER_URL)
-        .client(httpclient(context))
+        .client(okHttpClient!!)
         .build()
 }
 

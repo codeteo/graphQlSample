@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.apollographql.apollo.rx2.rxQuery
 import com.example.rocketreserver.data.ApiService
 import com.example.rocketreserver.data.apolloClient
+import com.example.rocketreserver.data.initHttpClient
 import com.example.rocketreserver.data.retrofitClient
 import com.example.rocketreserver.databinding.LaunchListFragmentBinding
 import com.google.gson.JsonElement
@@ -32,6 +33,8 @@ class LaunchListFragment : Fragment() {
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initHttpClient(requireContext())
 
         binding.btnApollo.setOnClickListener {
             apolloClient(requireContext())
@@ -64,8 +67,8 @@ class LaunchListFragment : Fragment() {
     private fun createRequestBody(): RequestBody {
         val json = JSONObject()
         json.put("operationName", "LaunchList")
-        json.put("variables", "{}")
-        json.put("query", "\"query LaunchList { launches { __typename hasMore cursor launches { __typename id site mission { __typename name missionPatch(size: SMALL) } } } }\"")
+        json.put("variables", JsonObject())
+        json.put("query", "query LaunchList { launches { __typename hasMore cursor launches { __typename id site mission { __typename name missionPatch(size: SMALL) } } } }")
 
         return RequestBody.create(
                 "application/json; charset=utf-8".toMediaTypeOrNull(),
