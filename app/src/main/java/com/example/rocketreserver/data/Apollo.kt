@@ -4,14 +4,22 @@ import android.content.Context
 import android.os.Looper
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.subscription.WebSocketSubscriptionTransport
+import com.example.rocketreserver.LaunchListQuery
 import com.example.rocketreserver.User
+import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 private var instance: ApolloClient? = null
 
@@ -54,11 +62,18 @@ private class AuthorizationInterceptor(val context: Context) : Interceptor {
     }
 }
 
-fun retrofitClient(okHttpClient: OkHttpClient): Retrofit {
+fun retrofitClient(context: Context): Retrofit {
     return Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .baseUrl(SERVER_URL)
-        .client(okHttpClient)
+        .client(httpclient(context))
         .build()
+}
+
+interface ApiService {
+
+    @POST("/")
+    fun getLaunches(@Body params: RequestBody): Observable<retrofit2.Response<LaunchListQuery.Data>>
+
 }
