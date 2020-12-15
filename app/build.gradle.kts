@@ -66,4 +66,6 @@ dependencies {
     implementation("com.squareup.retrofit2:adapter-rxjava2:2.3.0")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 
+    // Retrofit logging
+    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
 }

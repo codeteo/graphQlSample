@@ -7,6 +7,7 @@ import com.example.rocketreserver.User
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 
 private var instance: ApolloClient? = null
 
@@ -22,6 +23,7 @@ fun apolloClient(context: Context): ApolloClient {
     instance = ApolloClient.builder()
             .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
             .okHttpClient(OkHttpClient().newBuilder()
+                    .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .addInterceptor(AuthorizationInterceptor(context))
                     .build()
             )
