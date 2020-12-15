@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.api.load
+import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo.rx2.rxMutate
 import com.apollographql.apollo.rx2.rxQuery
 import com.example.rocketreserver.data.apolloClient
 import com.example.rocketreserver.databinding.LaunchDetailsFragmentBinding
@@ -84,6 +86,25 @@ class LaunchDetailsFragment : Fragment() {
                 )
                 return@setOnClickListener
             }
+
+            val mutation = if (isBooked) {
+                CancelTripMutation(id = args.launchId)
+            } else {
+                BookTripMutation(id = args.launchId)
+            }
+
+            apolloClient(requireContext()).rxMutate(mutation)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { res ->
+                        run {
+                            if (res.hasErrors()) {
+                                configureButton(isBooked)
+                            }
+                            configureButton(!isBooked)
+                        }
+                    }
+
         }
     }
 }
