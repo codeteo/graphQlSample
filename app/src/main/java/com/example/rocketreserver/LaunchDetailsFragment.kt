@@ -1,6 +1,7 @@
 package com.example.rocketreserver
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class LaunchDetailsFragment : Fragment() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             {
-                                it.data?.launch?.let {launch ->
+                                it.data?.launch?.let { launch ->
                                     binding.progressBar.visibility = View.GONE
 
                                     binding.missionPatch.load(launch.mission?.missionPatch) {

@@ -13,8 +13,6 @@ import com.apollographql.apollo.rx2.rxQuery
 import com.example.rocketreserver.data.apolloClient
 import com.example.rocketreserver.databinding.LaunchListFragmentBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class LaunchListFragment : Fragment() {
