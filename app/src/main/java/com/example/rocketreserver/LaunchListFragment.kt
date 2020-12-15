@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.rx2.rxQuery
 import com.example.rocketreserver.data.apolloClient
@@ -38,6 +39,11 @@ class LaunchListFragment : Fragment() {
                     val adapter = LaunchListAdapter(launches)
                     binding.launches.layoutManager = LinearLayoutManager(requireContext())
                     binding.launches.adapter = adapter
+                    adapter.onItemClicked = { launch ->
+                        findNavController().navigate(
+                                LaunchListFragmentDirections.openLaunchDetails(launchId = launch.id)
+                        )
+                    }
                 }
             }
 
