@@ -37,7 +37,7 @@ class LaunchDetailsFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             binding.error.visibility = View.GONE
 
-            apolloClient.rxQuery(LaunchDetailsQuery(id = args.launchId))
+            apolloClient(requireContext()).rxQuery(LaunchDetailsQuery(id = args.launchId))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(

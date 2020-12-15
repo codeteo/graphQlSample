@@ -27,7 +27,7 @@ class LaunchListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        apolloClient.rxQuery(LaunchListQuery())
+        apolloClient(requireContext()).rxQuery(LaunchListQuery())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

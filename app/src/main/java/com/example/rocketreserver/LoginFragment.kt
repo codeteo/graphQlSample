@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
             binding.submitProgressBar.visibility = View.VISIBLE
             binding.submit.visibility = View.GONE
 
-            apolloClient.rxMutate(LoginMutation(email = Input.fromNullable(email)))
+            apolloClient(requireContext()).rxMutate(LoginMutation(email = Input.fromNullable(email)))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { response ->
